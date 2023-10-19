@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Geonames</title>
+</head>
+<body>
+    <h1>Consulta Geonames</h1>
+    <label for="ubicacion">Ubicación:</label>
+    <input type="text" id="ubicacionInput" placeholder="Escribe el nombre de la ubicacion">
+    <button onclick="obtenerDatosGeonames()">Consultar</button>
+    <div id="resultado"></div>
+
+    <script>
+        function obtenerDatosGeonames() {
+            const username = "migfel"; // Reemplaza con tu nombre de usuario de Geonames
+            const ubicacion = document.getElementById("ubicacionInput").value;
+            const url = `http://api.geonames.org/searchJSON?q=${ubicacion}&maxRows=1&username=${username}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.geonames && data.geonames.length > 0) {
+                        const lugar = data.geonames[0];
+                        const pais = lugar.countryName;
+                        const poblacion = lugar.population;
+                        const resultado = `País: ${pais}<br>Población: ${poblacion}`;
+                        document.getElementById("resultado").innerHTML = resultado;
+                    } else {
+                        document.getElementById("resultado").innerHTML = "Datos de Geonames no disponibles.";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("resultado").innerHTML = "Error: " + error.message;
+                });
+        }
+    </script>
+</body>
+</html>
