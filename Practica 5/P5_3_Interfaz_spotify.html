@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Spotify</title>
+</head>
+<body>
+    <h1>Consulta Spotify</h1>
+    <label for="pais">País:</label>
+    <input type="text" id="paisInput" placeholder="Escribe el nombre del país">
+    <button onclick="obtenerListasDeReproduccion()">Consultar</button>
+    <div id="resultado"></div>
+
+    <script>
+        function obtenerListasDeReproduccion() {
+            const pais = document.getElementById("paisInput").value;
+            const url = `http://localhost:9090/playlist/${pais}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.listas) {
+                        const listas = data.listas.join(', ');
+                        const resultado = `Listas de reproducción populares en ${pais}: ${listas}`;
+                        document.getElementById("resultado").innerHTML = resultado;
+                    } else {
+                        document.getElementById("resultado").innerHTML = "Datos de Spotify no disponibles para este país.";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("resultado").innerHTML = "Error: " + error.message;
+                });
+        }
+    </script>
+</body>
+</html>

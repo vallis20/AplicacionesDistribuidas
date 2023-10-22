@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta Clima</title>
+</head>
+<body>
+    <h1>Consulta Clima</h1>
+    <label for="ubicacion">País:</label>
+    <input type="text" id="ubicacionInput" placeholder="Escribe el nombre del país">
+    <button onclick="obtenerClima()">Consultar</button>
+    <div id="resultado"></div>
+
+    <script>
+        function obtenerClima() {
+            const pais = document.getElementById("ubicacionInput").value;
+            const url = `http://localhost:9090/temperature/${pais}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.temperatura && data.clima) {
+                        const temperatura = data.temperatura.toFixed(2);  // Redondear a dos decimales
+                        const clima = data.clima;
+                        const resultado = `Temperatura: ${temperatura} °C<br>Clima: ${clima}`;
+                        document.getElementById("resultado").innerHTML = resultado;
+                    } else {
+                        document.getElementById("resultado").innerHTML = "Datos del clima no disponibles.";
+                    }
+                })
+                .catch(error => {
+                    document.getElementById("resultado").innerHTML = "Error: " + error.message;
+                });
+        }
+    </script>
+</body>
+</html>
