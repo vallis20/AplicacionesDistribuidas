@@ -24,7 +24,7 @@ def obtener_playlist(pais):
     
     if response.status_code == 200:
         data = response.json()
-        print(data)
+        #print(data)
         return f'Pais: {pais} -> listas más populares: {data["listas"]}'
     elif response.status_code == 404:
         return "País no encontrado"
