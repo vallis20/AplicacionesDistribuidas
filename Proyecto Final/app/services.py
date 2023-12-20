@@ -1,5 +1,14 @@
 import os
 
+current_status = "online"
+
+def set_status(status):
+    global current_status
+    current_status = status
+
+def get_status():
+    return current_status
+
 class FileService:
     @staticmethod
     def upload_file(file):
@@ -20,7 +29,7 @@ class FileService:
             # Maneja cualquier error que pueda ocurrir durante la carga del archivo
             print(f"Error al cargar el archivo: {e}")
             return None
-class FileService:
+
     @staticmethod
     def download_file(file_id):
         try:
