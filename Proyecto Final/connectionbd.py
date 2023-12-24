@@ -45,3 +45,7 @@ class BaseDatos():
         if 'conn' in locals():
             self.conn.close()
             print("Conexión cerrada.")
+    
+    def execute_query(self, query):
+        self.cursor.execute(query)
+        return self.cursor.fetchall()

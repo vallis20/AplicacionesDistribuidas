@@ -27,25 +27,26 @@ CREATE TABLE Audio (
     upload_date DATETIME DEFAULT GETDATE() 
 );
 
-CREATE TABLE Reportes (
-    reportes_id INT IDENTITY(1,1) PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-	typeR VARCHAR(50) NOT NULL, --Facturacion, estadisticas
-    upload_date DATETIME DEFAULT GETDATE() 
-);
-
 CREATE TABLE Descargas (
     download_id INT IDENTITY(1,1) PRIMARY KEY,
     fecha_descarga DATETIME DEFAULT CURRENT_TIMESTAMP,
     f_usr_id INT,
     f_streaming_id INT,
     --f_audio_id INT,
-	f_reportes_id INT,
 	FOREIGN KEY (f_usr_id) REFERENCES Usuarios(usr_id),
 	FOREIGN KEY (f_streaming_id) REFERENCES Streaming(streaming_id),
 	--FOREIGN KEY (f_audio_id) REFERENCES Audio(audio_id),
-	FOREIGN KEY (f_reportes_id) REFERENCES Reportes(reportes_id),
 );
+
+CREATE TABLE Facturacion (
+    factura_id INT IDENTITY(1,1) PRIMARY KEY,
+    usuario_id INT, -- Assuming a foreign key to the customer table
+    fecha_factura DATETIME DEFAULT CURRENT_TIMESTAMP,
+    total_amount DECIMAL(10, 2),
+    descripcion VARCHAR(255),
+	FOREIGN KEY (usuario_id) REFERENCES Usuarios(usr_id)
+);
+
 
 -- Insertar registros en la tabla Usuarios
 INSERT INTO Usuarios (username, passwordw, email, nombre, apellido) 
@@ -81,27 +82,14 @@ VALUES
 ('Audio4','wav', 170),
 ('Audio5','mp3', 190);
 
--- Insertar registros en la tabla Reportes
-
-INSERT INTO Reportes (title, typeR) 
-VALUES ('No descargo', '0')
-
-INSERT INTO Reportes (title, typeR) 
-VALUES 
-('Reporte1', 'Facturacion'),
-('Reporte2', 'Estadisticas'),
-('Reporte3', 'Facturacion'),
-('Reporte4', 'Estadisticas'),
-('Reporte5', 'Facturacion');
-
 -- Insertar registros en la tabla Descargas
-INSERT INTO Descargas (f_usr_id, f_streaming_id, f_reportes_id) 
+INSERT INTO Descargas (f_usr_id, f_streaming_id) 
 VALUES 
-(1, 1, 6),
-(2, 1, 6),
-(3, 4, 1),
-(4, 1, 4),
-(5, 4, 1);
+(1, 1),
+(2, 1),
+(3, 4),
+(4, 1),
+(5, 4);
 
 /*INSERT INTO Descargas (f_usr_id, f_streaming_id, f_audio_id, f_reportes_id) 
 VALUES 
@@ -114,7 +102,7 @@ VALUES
 SELECT*FROM Descargas
 SELECT*FROM Usuarios
 
--- Consulta para mostrar datos de descargas con información relacionada
+-- Consulta para mostrar datos de descargas con informaciï¿½n relacionada
 SELECT
     d.download_id,
     d.fecha_descarga,
@@ -132,5 +120,7 @@ LEFT JOIN
    -- Audio a ON d.f_audio_id = a.audio_id
 LEFT JOIN
     Reportes r ON d.f_reportes_id = r.reportes_id;
+
+
 
 DROP DATABASE Contenido
