@@ -91,6 +91,14 @@ VALUES
 (4, 1),
 (5, 4);
 
+INSERT INTO Facturacion (usuario_id, total_amount, descripcion)
+VALUES
+(1, 100.50, 'Invoice for User 1'),
+(2, 150.75, 'Invoice for User 2'),
+(3, 200.00, 'Invoice for User 3'),
+(4, 120.00, 'Invoice for User 4'),
+(5, 180.25, 'Invoice for User 5');
+
 /*INSERT INTO Descargas (f_usr_id, f_streaming_id, f_audio_id, f_reportes_id) 
 VALUES 
 (1, 1, 6, 6),
@@ -109,7 +117,7 @@ SELECT
     u.username AS usuario,
     s.title AS streaming_title,
    -- a.title AS audio_title,
-    r.title AS reporte_title
+   -- r.title AS reporte_title
 FROM
     Descargas d
 JOIN
@@ -118,9 +126,21 @@ LEFT JOIN
     Streaming s ON d.f_streaming_id = s.streaming_id
 --LEFT JOIN
    -- Audio a ON d.f_audio_id = a.audio_id
-LEFT JOIN
-    Reportes r ON d.f_reportes_id = r.reportes_id;
+--LEFT JOIN
+   -- Reportes r ON d.f_reportes_id = r.reportes_id;
 
+
+	SELECT
+    f.factura_id,
+    f.fecha_factura,
+    f.total_amount,
+    f.descripcion,
+    u.username AS user_username,
+    u.email AS user_email
+FROM
+    Facturacion f
+JOIN
+    Usuarios u ON f.usuario_id = u.usr_id;
 
 
 DROP DATABASE Contenido
