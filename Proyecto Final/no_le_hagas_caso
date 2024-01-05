@@ -1,20 +1,20 @@
 # Importa la clase BaseDatos
 from connectionbd import BaseDatos
 
-# Función para generar el ticket en HTML
-def generate_ticket(results):
+# Función para generar el ticket en HTML con datos de usuarios
+def generate_user_ticket(users_data):
     # Estructura básica del ticket en HTML
     ticket_html = '''
     <html>
     <head>
-        <title>Ticket de Consulta</title>
+        <title>Ticket de Usuarios</title>
         <style>
             /* Estilos CSS para el ticket */
             /* ... Estilos personalizados ... */
         </style>
     </head>
     <body>
-        <h1>Ticket de Consulta de Usuarios</h1>
+        <h1>Reporte de Usuarios</h1>
         <div class="ticket-content">
             <table border="1">
                 <tr>
@@ -26,11 +26,15 @@ def generate_ticket(results):
                     <th>Fecha de Registro</th>
                 </tr>
     '''
-    # Iterar sobre los resultados y agregar filas a la tabla en HTML
-    for row in results:
+    # Iterar sobre los datos de usuarios y agregar filas a la tabla en HTML
+    for user in users_data:
         ticket_html += '<tr>'
-        for item in row:
-            ticket_html += f'<td>{item}</td>'
+        ticket_html += f'<td>{user[0]}</td>'  # ID
+        ticket_html += f'<td>{user[1]}</td>'  # Usuario
+        ticket_html += f'<td>{user[2]}</td>'  # Email
+        ticket_html += f'<td>{user[3]}</td>'  # Nombre
+        ticket_html += f'<td>{user[4]}</td>'  # Apellido
+        ticket_html += f'<td>{user[5]}</td>'  # Fecha de Registro
         ticket_html += '</tr>'
     
     # Cerrar la estructura del ticket en HTML
@@ -52,14 +56,14 @@ mi_bd = BaseDatos()
 mi_bd.connect()
 
 # Realiza una consulta en la tabla Usuarios
-resultados = mi_bd.query_table('Usuarios')
+user_data = mi_bd.query_table('Usuarios')
 
-# Genera el ticket en HTML con los resultados obtenidos
-if resultados:
-    generate_ticket(resultados)
-    print("Ticket generado: ticket_usuarios.html")
+# Genera el ticket en HTML con los datos de usuarios obtenidos
+if user_data:
+    generate_user_ticket(user_data)
+    print("Ticket de Usuarios generado: ticket_usuarios.html")
 else:
-    print("No hay resultados")
+    print("No hay datos de usuarios")
 
 # Cierra la conexión
 mi_bd.disconnect()
