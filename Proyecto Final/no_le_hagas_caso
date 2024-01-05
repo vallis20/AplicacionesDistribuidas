@@ -1,10 +1,8 @@
 # Importa la clase BaseDatos
 from connectionbd import BaseDatos
 
-# Función para generar el ticket en HTML con datos de usuarios
+# Función para generar el ticket en HTML con datos de usuarios y estilos CSS
 def generate_user_ticket(users_data):
-    
-
     # Estructura básica del ticket en HTML
     ticket_html = '''
     <html>
@@ -12,13 +10,36 @@ def generate_user_ticket(users_data):
         <title>Ticket de Usuarios</title>
         <style>
             /* Estilos CSS para el ticket */
-            /* ... Estilos personalizados ... */
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            .ticket-content {
+                margin: 20px;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+            .payment-details {
+                background-color: #f9f9f9;
+                font-style: italic;
+            }
         </style>
     </head>
     <body>
         <h1>Reporte de Usuarios</h1>
         <div class="ticket-content">
-            <table border="1">
+            <table>
                 <tr>
                     <th>ID</th>
                     <th>Usuario</th>
@@ -39,18 +60,18 @@ def generate_user_ticket(users_data):
         ticket_html += f'<td>{user[5]}</td>'  # Fecha de Registro
         ticket_html += '</tr>'
     
-    # Detalles del pago
+    # Detalles del pago con estilos adicionales
     ticket_html += '''
-            <tr>
+            <tr class="payment-details">
                 <td colspan="6">Detalles del Pago: Sin detalles </td>
             </tr>
-            <tr>
+            <tr class="payment-details">
                 <td colspan="6">Método de Pago: Tarjeta </td>
             </tr>
-            <tr>
+            <tr class="payment-details">
                 <td colspan="6">Monto de Pago: $99.99</td>
             </tr>
-            <tr>
+            <tr class="payment-details">
                 <td colspan="6">Número de Tarjeta: **** **** **** 0951</td>
             </tr>
     '''
