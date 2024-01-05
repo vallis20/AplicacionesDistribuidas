@@ -1,77 +1,19 @@
 # Importa la clase BaseDatos
 from connectionbd import BaseDatos
 
-# Función para generar el reporte en HTML
-def generate_subscription_report(subscription_data):
-    # Estructura básica del reporte en HTML
-    report_html = '''
-    <html>
-    <head>
-        <title>Reporte de Integración con Sistema de Pagos</title>
-        <style>
-            /* Estilos CSS para el reporte */
-            /* ... Estilos personalizados ... */
-        </style>
-    </head>
-    <body>
-        <h1>Reporte de Integración con Sistema de Pagos</h1>
-        <div class="report-content">
-            <h2>Detalles de la Suscripción</h2>
-            <table border="1">
-                <tr>
-                    <th>ID de Usuario</th>
-                    <th>Nombre de Usuario</th>
-                    <th>Email</th>
-                    <th>Plan de Suscripción</th>
-                    <th>Estado de la Suscripción</th>
-                    <!-- Otros detalles relevantes -->
-                </tr>
-    '''
-    # Iterar sobre los datos de suscripción y agregar filas a la tabla en HTML
-    for subscription in subscription_data:
-        report_html += '<tr>'
-        report_html += f'<td>{subscription["usr_id"]}</td>'
-        report_html += f'<td>{subscription["username"]}</td>'
-        report_html += f'<td>{subscription["email"]}</td>'
-        report_html += f'<td>{subscription["subscription_plan"]}</td>'
-        report_html += f'<td>{subscription["subscription_status"]}</td>'
-        # Agregar más columnas según sea necesario
-        report_html += '</tr>'
-    
-    # Cerrar la estructura del reporte en HTML
-    report_html += '''
-            </table>
-        </div>
-    </body>
-    </html>
-    '''
-
-    # Escribir el contenido en un archivo HTML
-    with open('subscription_report.html', 'w') as file:
-        file.write(report_html)
-
-# Crea una instancia de la clase BaseDatos
+# Crea una instancia de la clase
 mi_bd = BaseDatos()
 
 # Intenta establecer la conexión
 mi_bd.connect()
 
-# Realiza una consulta para obtener los datos de suscripción
-subscription_data = mi_bd.query_table('Usuarios')  # Modifica la consulta según tu esquema de base de datos
-
-# Genera el reporte en HTML con los datos de suscripción obtenidos
-if subscription_data:
-    generate_subscription_report(subscription_data)
-    print("Reporte de suscripción generado: subscription_report.html")
+# Realiza una consulta en una tabla (reemplaza 'NombreDeTuTabla' con el nombre real de tu tabla)
+resultados = mi_bd.query_table('Usuarios')
+if(resultados!=0):
+    print("Resultados de la consulta:")
+    print(resultados)
 else:
-    print("No hay datos de suscripción disponibles")
+    print("No hay resultados")
 
 # Cierra la conexión
 mi_bd.disconnect()
-
-for row in subscription_data:
-    report_html += '<tr>'
-    report_html += f'<td>{row[0]}</td>'  # Accediendo al primer elemento de la tupla
-    report_html += f'<td>{row[1]}</td>'  # Accediendo al segundo elemento de la tupla
-    # ... y así sucesivamente para otros elementos de la tupla
-    report_html += '</tr>'
