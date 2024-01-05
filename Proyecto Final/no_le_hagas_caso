@@ -37,6 +37,22 @@ def generate_user_ticket(users_data):
         ticket_html += f'<td>{user[5]}</td>'  # Fecha de Registro
         ticket_html += '</tr>'
     
+    # Detalles del pago
+    ticket_html += '''
+            <tr>
+                <td colspan="6">Detalles del Pago:</td>
+            </tr>
+            <tr>
+                <td colspan="6">Método de Pago: {payment_method}</td>
+            </tr>
+            <tr>
+                <td colspan="6">Monto de Pago: {payment_amount}</td>
+            </tr>
+            <tr>
+                <td colspan="6">Número de Tarjeta: {card_number}</td>
+            </tr>
+    '''
+    
     # Cerrar la estructura del ticket en HTML
     ticket_html += '''
             </table>
@@ -48,6 +64,7 @@ def generate_user_ticket(users_data):
     # Escribir el contenido en un archivo HTML
     with open('ticket_usuarios.html', 'w') as file:
         file.write(ticket_html)
+
 
 # Crea una instancia de la clase BaseDatos
 mi_bd = BaseDatos()
@@ -65,5 +82,6 @@ if user_data:
 else:
     print("No hay datos de usuarios")
 
+generate_user_ticket(user_data, payment_method="Tarjeta", payment_amount="$99.99", card_number="**** **** **** 0951")
 # Cierra la conexión
 mi_bd.disconnect()
