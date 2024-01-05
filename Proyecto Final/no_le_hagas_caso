@@ -1,8 +1,8 @@
 # Importa la clase BaseDatos
 from connectionbd import BaseDatos
 
-# Función para generar el ticket en HTML con datos de usuarios y detalles de pago
-def generate_user_ticket(users_data, payment_method, payment_amount, card_number):
+# Función para generar el ticket en HTML con datos de usuarios
+def generate_user_ticket(users_data):
     # Estructura básica del ticket en HTML
     ticket_html = '''
     <html>
@@ -37,22 +37,6 @@ def generate_user_ticket(users_data, payment_method, payment_amount, card_number
         ticket_html += f'<td>{user[5]}</td>'  # Fecha de Registro
         ticket_html += '</tr>'
     
-    # Detalles del pago
-    ticket_html += '''
-            <tr>
-                <td colspan="6">Detalles del Pago:</td>
-            </tr>
-            <tr>
-                <td colspan="6">Método de Pago: {payment_method}</td>
-            </tr>
-            <tr>
-                <td colspan="6">Monto de Pago: {payment_amount}</td>
-            </tr>
-            <tr>
-                <td colspan="6">Número de Tarjeta: {card_number}</td>
-            </tr>
-    '''
-    
     # Cerrar la estructura del ticket en HTML
     ticket_html += '''
             </table>
@@ -65,8 +49,21 @@ def generate_user_ticket(users_data, payment_method, payment_amount, card_number
     with open('ticket_usuarios.html', 'w') as file:
         file.write(ticket_html)
 
-# Resto del código...
+# Crea una instancia de la clase BaseDatos
+mi_bd = BaseDatos()
 
-# Después de generar el ticket de usuarios
-# Llamar a la función con los datos y detalles del pago
-generate_user_ticket(user_data, payment_method="Tarjeta", payment_amount="$99.99", card_number="**** **** **** 0951")
+# Intenta establecer la conexión
+mi_bd.connect()
+
+# Realiza una consulta en la tabla Usuarios
+user_data = mi_bd.query_table('Usuarios')
+
+# Genera el ticket en HTML con los datos de usuarios obtenidos
+if user_data:
+    generate_user_ticket(user_data)
+    print("Ticket de Usuarios generado: ticket_usuarios.html")
+else:
+    print("No hay datos de usuarios")
+
+# Cierra la conexión
+mi_bd.disconnect()
