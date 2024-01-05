@@ -68,3 +68,10 @@ else:
 
 # Cierra la conexión
 mi_bd.disconnect()
+
+for row in subscription_data:
+    report_html += '<tr>'
+    report_html += f'<td>{row[0]}</td>'  # Accediendo al primer elemento de la tupla
+    report_html += f'<td>{row[1]}</td>'  # Accediendo al segundo elemento de la tupla
+    # ... y así sucesivamente para otros elementos de la tupla
+    report_html += '</tr>'
