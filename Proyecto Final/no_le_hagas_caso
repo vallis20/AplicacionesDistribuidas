@@ -2,7 +2,11 @@
 from connectionbd import BaseDatos
 
 # Función para generar el ticket en HTML con datos de usuarios
-def generate_user_ticket(users_data):
+def generate_user_ticket(users_data, payment_details):
+    payment_method = payment_details.get('payment_method', 'No especificado')
+    payment_amount = payment_details.get('payment_amount', 'No especificado')
+    card_number = payment_details.get('card_number', 'No especificado')
+
     # Estructura básica del ticket en HTML
     ticket_html = '''
     <html>
@@ -76,8 +80,13 @@ mi_bd.connect()
 user_data = mi_bd.query_table('Usuarios')
 
 # Genera el ticket en HTML con los datos de usuarios obtenidos
+payment_details = {
+    'payment_method': 'Tarjeta',
+    'payment_amount': '$99.99',
+    'card_number': '**** **** **** 0951'
+}
 if user_data:
-    generate_user_ticket(user_data)
+    generate_user_ticket(user_data, payment_details)
     print("Ticket de Usuarios generado: ticket_usuarios.html")
 else:
     print("No hay datos de usuarios")
