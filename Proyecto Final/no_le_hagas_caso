@@ -1,7 +1,51 @@
 # Importa la clase BaseDatos
 from connectionbd import BaseDatos
 
-# Crea una instancia de la clase
+# Función para generar el ticket en HTML
+def generate_ticket(results):
+    # Estructura básica del ticket en HTML
+    ticket_html = '''
+    <html>
+    <head>
+        <title>Ticket de Consulta</title>
+        <style>
+            /* Estilos CSS para el ticket */
+            /* ... Estilos personalizados ... */
+        </style>
+    </head>
+    <body>
+        <h1>Ticket de Consulta de Usuarios</h1>
+        <div class="ticket-content">
+            <table border="1">
+                <tr>
+                    <th>ID</th>
+                    <th>Usuario</th>
+                    <th>Email</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Fecha de Registro</th>
+                </tr>
+    '''
+    # Iterar sobre los resultados y agregar filas a la tabla en HTML
+    for row in results:
+        ticket_html += '<tr>'
+        for item in row:
+            ticket_html += f'<td>{item}</td>'
+        ticket_html += '</tr>'
+    
+    # Cerrar la estructura del ticket en HTML
+    ticket_html += '''
+            </table>
+        </div>
+    </body>
+    </html>
+    '''
+
+    # Escribir el contenido en un archivo HTML
+    with open('ticket_usuarios.html', 'w') as file:
+        file.write(ticket_html)
+
+# Crea una instancia de la clase BaseDatos
 mi_bd = BaseDatos()
 
 # Intenta establecer la conexión
@@ -9,10 +53,11 @@ mi_bd.connect()
 
 # Realiza una consulta en la tabla Usuarios
 resultados = mi_bd.query_table('Usuarios')
+
+# Genera el ticket en HTML con los resultados obtenidos
 if resultados:
-    print("Resultados de la consulta:")
-    for row in resultados:
-        print(row)  # Muestra cada fila de resultados
+    generate_ticket(resultados)
+    print("Ticket generado: ticket_usuarios.html")
 else:
     print("No hay resultados")
 
