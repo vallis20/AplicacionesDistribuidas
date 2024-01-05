@@ -4,9 +4,17 @@ resultados = mi_bd.query_table('Streaming')
 # Abre un archivo HTML en modo escritura
 with open('resultados_consulta.html', 'w') as archivo_html:
     # Escribe la estructura básica del HTML y el encabezado
-    archivo_html.write('<html><head><title>Resultados de la consulta</title></head><body>')
+    archivo_html.write('<!DOCTYPE html><html><head><title>Resultados de la consulta</title>')
+    archivo_html.write('<style>')
+    # Agrega estilos CSS para mejorar la apariencia
+    archivo_html.write('body { font-family: Arial, sans-serif; background-color: #f4f4f4; }')
+    archivo_html.write('h1 { color: #333; }')
+    archivo_html.write('ul { list-style-type: none; padding: 0; }')
+    archivo_html.write('li { margin-bottom: 5px; background-color: #fff; padding: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }')
+    archivo_html.write('p { font-style: italic; color: #777; }')
+    archivo_html.write('</style></head><body>')
     
-    # Verifica si hay resultados de la consulta y genera el contenido HTML correspondiente
+    # Escribe el contenido del HTML con estilos
     if resultados != 0:
         archivo_html.write('<h1>Resultados de la consulta:</h1>')
         archivo_html.write('<ul>')
