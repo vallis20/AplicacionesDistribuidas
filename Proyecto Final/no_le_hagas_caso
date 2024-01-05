@@ -6,12 +6,14 @@ with open('resultados_consulta.html', 'w') as archivo_html:
     # Escribe la estructura básica del HTML y el encabezado
     archivo_html.write('<!DOCTYPE html><html><head><title>Resultados de la consulta</title>')
     archivo_html.write('<style>')
-    # Agrega estilos CSS para mejorar la apariencia
-    archivo_html.write('body { font-family: Arial, sans-serif; background-color: #f4f4f4; }')
+    # Agrega estilos CSS con colores más vibrantes
+    archivo_html.write('body { font-family: Arial, sans-serif; background-color: #f7f7f7; margin: 0; padding: 20px; }')
     archivo_html.write('h1 { color: #333; }')
     archivo_html.write('ul { list-style-type: none; padding: 0; }')
-    archivo_html.write('li { margin-bottom: 5px; background-color: #fff; padding: 10px; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }')
+    archivo_html.write('li { margin-bottom: 15px; background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }')
     archivo_html.write('p { font-style: italic; color: #777; }')
+    archivo_html.write('h1, p { text-align: center; }')
+    archivo_html.write('li:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }')
     archivo_html.write('</style></head><body>')
     
     # Escribe el contenido del HTML con estilos
