@@ -1,0 +1,20 @@
+# Realiza una consulta en una tabla (reemplaza 'NombreDeTuTabla' con el nombre real de tu tabla)
+resultados = mi_bd.query_table('Streaming')
+
+# Abre un archivo HTML en modo escritura
+with open('resultados_consulta.html', 'w') as archivo_html:
+    # Escribe la estructura básica del HTML y el encabezado
+    archivo_html.write('<html><head><title>Resultados de la consulta</title></head><body>')
+    
+    # Verifica si hay resultados de la consulta y genera el contenido HTML correspondiente
+    if resultados != 0:
+        archivo_html.write('<h1>Resultados de la consulta:</h1>')
+        archivo_html.write('<ul>')
+        for resultado in resultados:
+            archivo_html.write(f'<li>{resultado}</li>')
+        archivo_html.write('</ul>')
+    else:
+        archivo_html.write('<p>No hay resultados</p>')
+    
+    # Cierra la estructura del HTML
+    archivo_html.write('</body></html>')
