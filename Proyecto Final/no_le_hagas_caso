@@ -14,11 +14,31 @@ with open('resultados_consulta.html', 'w') as archivo_html:
     archivo_html.write('p { font-style: italic; color: #777; }')
     archivo_html.write('h1, p { text-align: center; }')
     archivo_html.write('li:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.1); }')
-    archivo_html.write('</style></head><body>')
+    archivo_html.write('input[type="text"] { padding: 8px; margin-bottom: 10px; }')  # Estilos para el campo de búsqueda
+    archivo_html.write('</style>')
+    archivo_html.write('<script>')
+    # Agrega un script JavaScript para la funcionalidad de búsqueda
+    archivo_html.write('function buscar() {')
+    archivo_html.write('  var input, filtro, ul, li, textoValor;')
+    archivo_html.write('  input = document.getElementById("busqueda");')
+    archivo_html.write('  filtro = input.value.toUpperCase();')
+    archivo_html.write('  ul = document.getElementsByTagName("ul")[0];')
+    archivo_html.write('  li = ul.getElementsByTagName("li");')
+    archivo_html.write('  for (var i = 0; i < li.length; i++) {')
+    archivo_html.write('    textoValor = li[i].textContent || li[i].innerText;')
+    archivo_html.write('    if (textoValor.toUpperCase().indexOf(filtro) > -1) {')
+    archivo_html.write('      li[i].style.display = "";')
+    archivo_html.write('    } else {')
+    archivo_html.write('      li[i].style.display = "none";')
+    archivo_html.write('    }')
+    archivo_html.write('  }')
+    archivo_html.write('}')
+    archivo_html.write('</script></head><body>')
     
     # Escribe el contenido del HTML con estilos
+    archivo_html.write('<h1>Resultados de la consulta:</h1>')
+    archivo_html.write('<input type="text" id="busqueda" onkeyup="buscar()" placeholder="Buscar por resultado...">')
     if resultados != 0:
-        archivo_html.write('<h1>Resultados de la consulta:</h1>')
         archivo_html.write('<ul>')
         for resultado in resultados:
             archivo_html.write(f'<li>{resultado}</li>')
