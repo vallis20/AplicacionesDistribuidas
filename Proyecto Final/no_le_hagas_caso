@@ -25,13 +25,25 @@ def procesar_factura():
 
     try:
         cursor = conn.cursor()
-        # Insertar datos en la tabla Facturacion
-        sql = "INSERT INTO Facturacion (usuario_id, total_amount, descripcion, tarjeta) VALUES (?, ?, ?, ?)"
-        cursor.execute(sql, (1, total_pagar, 'Pago de suscripción', numT))  # Cambia '1' por el ID real del usuario
-        conn.commit()
-        return "Datos insertados correctamente"
+
+        # Obtener el usuario_id basado en el nombre del usuario
+        cursor.execute("SELECT usr_id FROM Usuarios WHERE nombre = ?", nombre)
+        usuario = cursor.fetchone()
+
+        if usuario:
+            usuario_id = usuario['usr_id']
+
+            # Insertar datos en la tabla Facturacion
+            sql = "INSERT INTO Facturacion (usuario_id, total_amount, descripcion, tarjeta) VALUES (?, ?, ?, ?)"
+            cursor.execute(sql, (usuario_id, total_pagar, 'Pago de suscripción', numT))
+            conn.commit()
+
+            return "Datos insertados correctamente"
+        else:
+            return "El usuario no fue encontrado"
     except Exception as e:
         return f"Error: {str(e)}"
+
 
 if __name__ == '__main__':
     app.run(debug=True)
