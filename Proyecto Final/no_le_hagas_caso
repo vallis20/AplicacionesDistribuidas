@@ -118,3 +118,34 @@
   </div>
 </body>
 </html>
+
+____________________________________________________________________________________________________________________________
+
+import pyodbc
+from flask import Flask, request, render_template
+
+app = Flask(__name__)
+
+# Configuración de la conexión a la base de datos
+server = 'tu_servidor'
+database = 'tu_basededatos'
+username = 'tu_usuario'
+password = 'tu_contraseña'
+conn = pyodbc.connect('DRIVER={SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+password)
+
+@app.route('/procesar_factura', methods=['POST'])
+def procesar_factura():
+    if request.method == 'POST':
+        nombre_cliente = request.form['nombre']
+
+        # Aquí realizas la inserción en la base de datos
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO Usuarios (nombre) VALUES (?)", nombre_cliente)
+        conn.commit()
+        cursor.close()
+
+        return "Nombre guardado en la base de datos: " + nombre_cliente
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
