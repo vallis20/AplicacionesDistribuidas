@@ -121,31 +121,40 @@
 
 ____________________________________________________________________________________________________________________________
 
+from flask import Flask, render_template, request
 import pyodbc
-from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
-# Configuración de la conexión a la base de datos
-server = 'tu_servidor'
-database = 'tu_basededatos'
-username = 'tu_usuario'
-password = 'tu_contraseña'
-conn = pyodbc.connect('DRIVER={SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+password)
+# Establecer la conexión a la base de datos SQL Server
+conn = pyodbc.connect(
+    'DRIVER={SQL Server};'
+    'SERVER=tu_servidor;'
+    'DATABASE=nombre_de_tu_base_de_datos;'
+    'UID=tu_usuario;'
+    'PWD=tu_contraseña;'
+)
+
+@app.route('/')
+def index():
+    return render_template('formulario.html')
 
 @app.route('/procesar_factura', methods=['POST'])
 def procesar_factura():
-    if request.method == 'POST':
-        nombre_cliente = request.form['nombre']
+    nombre = request.form['nombre']
+    metodo_pago = request.form['metodo_pago']
+    numT = request.form['numT']
+    total_pagar = request.form['total_pagar']
 
-        # Aquí realizas la inserción en la base de datos
+    try:
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO Usuarios (nombre) VALUES (?)", nombre_cliente)
+        # Insertar datos en la tabla Facturacion
+        sql = "INSERT INTO Facturacion (usuario_id, total_amount, descripcion, tarjeta) VALUES (?, ?, ?, ?)"
+        cursor.execute(sql, (1, total_pagar, 'Pago de suscripción', numT))  # Cambia '1' por el ID real del usuario
         conn.commit()
-        cursor.close()
-
-        return "Nombre guardado en la base de datos: " + nombre_cliente
+        return "Datos insertados correctamente"
+    except Exception as e:
+        return f"Error: {str(e)}"
 
 if __name__ == '__main__':
     app.run(debug=True)
-
