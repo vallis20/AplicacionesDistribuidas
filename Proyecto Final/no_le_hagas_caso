@@ -1,64 +1,120 @@
-from flask import Flask, render_template, request
-import pyodbc
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pago de Suscripcion</title>
+  <style>
+    /* Reset de estilos básicos */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-app = Flask(__name__)
+    /* Estilos para el cuerpo y el contenedor principal */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
 
-# Establecer la conexión a la base de datos SQL Server
-conn = pyodbc.connect(
-    'DRIVER={SQL Server};'
-    'SERVER=tu_servidor;'
-    'DATABASE=nombre_de_tu_base_de_datos;'
-    'UID=tu_usuario;'
-    'PWD=tu_contraseña;'
-)
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-@app.route('/')
-def index():
-    return render_template('formulario.html')
+    /* Estilos para títulos */
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
 
-@app.route('/procesar_factura', methods=['POST'])
-def procesar_factura():
-    nombre = request.form['nombre']
-    metodo_pago = request.form['metodo_pago']
-    numT = request.form['numT']
-    total_pagar = request.form['total_pagar']
+    h2 {
+      margin-top: 20px;
+      color: #555;
+    }
 
-    try:
-        cursor = conn.cursor()
+    /* Estilos para etiquetas y campos de entrada */
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #666;
+    }
 
-        # Obtener el usuario_id basado en el nombre del usuario
-        cursor.execute("SELECT usr_id FROM Usuarios WHERE nombre = ?", nombre)
-        usuario = cursor.fetchone()
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
 
-        if usuario:
-            usuario_id = usuario['usr_id']
+    input[type="submit"] {
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
 
-            # Insertar datos en la tabla Facturacion
-            sql = "INSERT INTO Facturacion (usuario_id, total_amount, descripcion, tarjeta) VALUES (?, ?, ?, ?)"
-            cursor.execute(sql, (usuario_id, total_pagar, 'Pago de suscripción', numT))
-            conn.commit()
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
 
-            return "Datos insertados correctamente"
-        else:
-            return "El usuario no fue encontrado"
-    except Exception as e:
-        return f"Error: {str(e)}"
+    /* Otros estilos */
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
 
+    .submit-btn {
+      width: auto;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Factura</h1>
+    <form action="/procesar_factura" method="post">
+      <!-- ... (los campos del formulario) ... -->
+      <h2>Datos del Cliente</h2>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre"><br><br>
+    
+    <label for="metodo_pago">Método de Pago:</label>
+    <select id="metodo_pago" name="metodo_pago">
+      <option value="tarjeta">Tarjeta</option>
+      <label for="numT">Número de Tarjeta:</label>
+      <input type="text" id="numeroTarjeta" name="numT"><br><br>
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
-raceback (most recent call last):
-  File "c:\Users\Home PC\Desktop\proyecto_final\pruebas\app.py", line 7, in <module>
-    conn = pyodbc.connect(
-           ^^^^^^^^^^^^^^^
-pyodbc.InterfaceError: ('IM002', '[IM002] [Microsoft][Administrador de controladores ODBC] No se encuentra el nombre del origen de datos y no se especificó ningún controlador predeterminado (0) (SQLDriverConnect)')
-
-* Serving Flask app 'app'
- * Debug mode: on
-WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
- * Running on http://127.0.0.1:5000
-Press CTRL+C to quit
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: 217-479-060
+    </select><br><br>
+    
+    <h2>Pago de Suscripción </h2>
+    <label for="precio_unitario">Precio Mensual:</label>
+    <input type="text" id="valor" value="$250.00" readonly>
+    
+    <h2>Totales</h2>
+    
+    <label for="total_pagar">Total a Pagar:</label>
+    <input type="text" id="valor" value="$250.00" readonly>
+    
+    <label for="terminos">Términos y Condiciones:</label><br>
+    <input type="checkbox" id="terminos" name="terminos" required>
+    <label for="terminos">Acepto los términos y condiciones</label><br><br>
+    
+      <input type="submit" value="Pagar" class="submit-btn">
+    </form>
+  </div>
+</body>
+</html>
