@@ -1,109 +1,120 @@
-# Importa la clase BaseDatos
-from connectionbd import BaseDatos
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pago de Suscripcion</title>
+  <style>
+    /* Reset de estilos básicos */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-# Función para generar el ticket en HTML con datos de usuarios y estilos CSS
-def generate_user_ticket(users_data):
-    # Estructura básica del ticket en HTML
-    ticket_html = '''
-    <html>
-    <head>
-        <title>Ticket de Usuarios</title>
-        <style>
-            /* Estilos CSS para el ticket */
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-            }
-            .ticket-content {
-                margin: 20px;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            th, td {
-                border: 1px solid #ddd;
-                padding: 8px;
-                text-align: left;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-            .payment-details {
-                background-color: #f9f9f9;
-                font-style: italic;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Reporte de Usuarios</h1>
-        <div class="ticket-content">
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Usuario</th>
-                    <th>Contraseña</th>
-                    <th>Email</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                </tr>
-    '''
-    # Iterar sobre los datos de usuarios y agregar filas a la tabla en HTML
-    for user in users_data:
-        ticket_html += '<tr>'
-        ticket_html += f'<td>{user[0]}</td>'  # ID
-        ticket_html += f'<td>{user[1]}</td>'  # Usuario
-        ticket_html += f'<td>{user[2]}</td>'  # Email
-        ticket_html += f'<td>{user[3]}</td>'  # Nombre
-        ticket_html += f'<td>{user[4]}</td>'  # Apellido
-        ticket_html += f'<td>{user[5]}</td>'  # Fecha de Registro
-        ticket_html += '</tr>'
+    /* Estilos para el cuerpo y el contenedor principal */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Estilos para títulos */
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    h2 {
+      margin-top: 20px;
+      color: #555;
+    }
+
+    /* Estilos para etiquetas y campos de entrada */
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #666;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    input[type="submit"] {
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    /* Otros estilos */
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
+
+    .submit-btn {
+      width: auto;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Factura</h1>
+    <form action="/procesar_factura" method="post">
+      <!-- ... (los campos del formulario) ... -->
+      <h2>Datos del Cliente</h2>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre"><br><br>
     
-    # Detalles del pago con estilos adicionales
-    ticket_html += '''
-            <tr class="payment-details">
-                <td colspan="6">Detalles del Pago: Sin detalles </td>
-            </tr>
-            <tr class="payment-details">
-                <td colspan="6">Método de Pago: Tarjeta </td>
-            </tr>
-            <tr class="payment-details">
-                <td colspan="6">Monto de Pago: $99.99</td>
-            </tr>
-            <tr class="payment-details">
-                <td colspan="6">Número de Tarjeta: **** **** **** 0951</td>
-            </tr>
-    '''
+    <label for="metodo_pago">Método de Pago:</label>
+    <select id="metodo_pago" name="metodo_pago">
+      <option value="tarjeta">Tarjeta</option>
+      <label for="numT">Número de Tarjeta:</label>
+      <input type="text" id="numeroTarjeta" name="numT"><br><br>
+
+    </select><br><br>
     
-    # Cerrar la estructura del ticket en HTML
-    ticket_html += '''
-            </table>
-        </div>
-    </body>
-    </html>
-    '''
-
-    # Escribir el contenido en un archivo HTML
-    with open('ticket_usuarios.html', 'w') as file:
-        file.write(ticket_html)
-
-
-# Crea una instancia de la clase BaseDatos
-mi_bd = BaseDatos()
-
-# Intenta establecer la conexión
-mi_bd.connect()
-
-# Realiza una consulta en la tabla Usuarios
-user_data = mi_bd.query_table('Usuarios')
-
-# Genera el ticket en HTML con los datos de usuarios obtenidos
-
-if user_data:
-    generate_user_ticket(user_data)
-    print("Ticket de Usuarios generado: ticket_usuarios.html")
-else:
-    print("No hay datos de usuarios")
-# Cierra la conexión
-mi_bd.disconnect()
+    <h2>Pago de Suscripción </h2>
+    <label for="precio_unitario">Precio Mensual:</label>
+    <input type="text" id="valor" value="$250.00" readonly>
+    
+    <h2>Totales</h2>
+    
+    <label for="total_pagar">Total a Pagar:</label>
+    <input type="text" id="valor" value="$250.00" readonly>
+    
+    <label for="terminos">Términos y Condiciones:</label><br>
+    <input type="checkbox" id="terminos" name="terminos" required>
+    <label for="terminos">Acepto los términos y condiciones</label><br><br>
+    
+      <input type="submit" value="Pagar" class="submit-btn">
+    </form>
+  </div>
+</body>
+</html>
