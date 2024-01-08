@@ -129,3 +129,148 @@ CREATE TABLE Facturacion (
 	tarjeta VARCHAR(20),
 	FOREIGN KEY (usuario_id) REFERENCES Usuarios(usr_id)
 );
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pago de Suscripcion</title>
+  <style>
+    /* Reset de estilos básicos */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Estilos para el cuerpo y el contenedor principal */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Estilos para títulos */
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    h2 {
+      margin-top: 20px;
+      color: #555;
+    }
+
+    /* Estilos para etiquetas y campos de entrada */
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #666;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    input[type="submit"] {
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    /* Otros estilos */
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
+
+    .submit-btn {
+      width: auto;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Factura</h1>
+    <form action="/procesar_factura" method="post">
+      <!-- ... (los campos del formulario) ... -->
+      <h2>Datos del Cliente</h2>
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre"><br><br>
+    
+    <label for="metodo_pago">Método de Pago:</label>
+    <select id="metodo_pago" name="metodo_pago">
+      <option value="tarjeta">Tarjeta</option>
+      <label for="numT">Número de Tarjeta:</label>
+      <input type="text" id="numeroTarjeta" name="numT"><br><br>
+
+    </select><br><br>
+    
+    <h2>Pago de Suscripción </h2>
+    <label for="precio_unitario">Precio Mensual:</label>
+    <input type="text" id="valor" value="$250.00" readonly>
+    
+    <h2>Totales</h2>
+    
+    <label for="total_pagar">Total a Pagar:</label>
+    <input type="text" id="valor" value="$250.00" readonly>
+    
+    <label for="terminos">Términos y Condiciones:</label><br>
+    <input type="checkbox" id="terminos" name="terminos" required>
+    <label for="terminos">Acepto los términos y condiciones</label><br><br>
+    
+      <input type="submit" value="Pagar" class="submit-btn">
+    </form>
+  </div>
+</body>
+</html>
+
+
+CREATE TABLE Facturacion (
+    factura_id INT IDENTITY(1,1) PRIMARY KEY,
+    usuario_id INT, -- Assuming a foreign key to the customer table
+    fecha_factura DATETIME DEFAULT CURRENT_TIMESTAMP,
+    total_amount DECIMAL(10, 2),
+    descripcion VARCHAR(255),
+	tarjeta VARCHAR(20),
+	FOREIGN KEY (usuario_id) REFERENCES Usuarios(usr_id)
+);
+
+   SELECT
+        u.username AS user_username,
+        f.factura_id,
+        f.fecha_factura,
+        f.total_amount,
+        f.descripcion,
+        f.tarjeta
+    FROM
+        Facturacion f
+    JOIN
+        Usuarios u ON f.usuario_id = u.usr_id;
+
