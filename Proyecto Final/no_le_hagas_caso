@@ -1,16 +1,15 @@
 from flask import Flask, render_template, request
-import pymysql
+import pyodbc
 
 app = Flask(__name__)
 
-# Configuración de la conexión a la base de datos (reemplaza con tus propios datos)
-db = pymysql.connect(
-    host='localhost',
-    user='tu_usuario',
-    password='tu_contraseña',
-    database='nombre_de_tu_base_de_datos',
-    charset='utf8mb4',
-    cursorclass=pymysql.cursors.DictCursor
+# Establecer la conexión a la base de datos SQL Server
+conn = pyodbc.connect(
+    'DRIVER={SQL Server};'
+    'SERVER=tu_servidor;'
+    'DATABASE=nombre_de_tu_base_de_datos;'
+    'UID=tu_usuario;'
+    'PWD=tu_contraseña;'
 )
 
 @app.route('/')
@@ -25,11 +24,11 @@ def procesar_factura():
     total_pagar = request.form['total_pagar']
 
     try:
-        with db.cursor() as cursor:
-            # Insertar datos en la tabla Facturacion
-            sql = "INSERT INTO Facturacion (usuario_id, total_amount, descripcion, tarjeta) VALUES (%s, %s, %s, %s)"
-            cursor.execute(sql, (1, total_pagar, 'Pago de suscripción', numT))  # Cambia '1' por el ID real del usuario
-        db.commit()
+        cursor = conn.cursor()
+        # Insertar datos en la tabla Facturacion
+        sql = "INSERT INTO Facturacion (usuario_id, total_amount, descripcion, tarjeta) VALUES (?, ?, ?, ?)"
+        cursor.execute(sql, (1, total_pagar, 'Pago de suscripción', numT))  # Cambia '1' por el ID real del usuario
+        conn.commit()
         return "Datos insertados correctamente"
     except Exception as e:
         return f"Error: {str(e)}"
