@@ -2,159 +2,63 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Pago de Suscripcion</title>
+  <title>Agradecimiento por tu pago</title>
   <style>
-    /* Reset de estilos básicos */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* Estilos para el cuerpo y el contenedor principal */
+    /* Estilos para la página de agradecimiento */
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
       background-color: #f4f4f4;
     }
 
     .container {
-      width: 80%;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
-    /* Estilos para títulos */
-    h1 {
+    .content {
       text-align: center;
-      margin-bottom: 20px;
+      padding: 40px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
       color: #333;
+      font-size: 36px;
+      margin-bottom: 20px;
     }
 
-    h2 {
-      margin-top: 20px;
+    p {
       color: #555;
+      font-size: 18px;
+      line-height: 1.6;
     }
 
-    /* Estilos para etiquetas y campos de entrada */
-    label {
-      display: block;
-      margin-bottom: 5px;
-      color: #666;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    input[type="tel"],
-    input[type="email"],
-    select,
-    textarea {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    input[type="submit"] {
-      padding: 10px 20px;
-      background-color: #4caf50;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    input[type="submit"]:hover {
-      background-color: #45a049;
-    }
-
-    /* Otros estilos */
-    textarea {
-      resize: vertical;
-      height: 100px;
-    }
-
-    .submit-btn {
-      width: auto;
-      margin-top: 20px;
+    /* Estilos adicionales */
+    @media (max-width: 768px) {
+      .content {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 28px;
+      }
+      p {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Factura</h1>
-    <form action="/procesar_factura" method="post">
-      <!-- ... (los campos del formulario) ... -->
-      <h2>Datos del Cliente</h2>
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre"><br><br>
-    
-    <label for="metodo_pago">Método de Pago:</label>
-    <select id="metodo_pago" name="metodo_pago">
-      <option value="tarjeta">Tarjeta</option>
-      <label for="numT">Número de Tarjeta:</label>
-      <input type="text" id="numeroTarjeta" name="numT"><br><br>
-
-    </select><br><br>
-    
-    <h2>Pago de Suscripción </h2>
-    <label for="precio_unitario">Precio Mensual:</label>
-    <input type="text" id="valor" value="$250.00" readonly>
-    
-    <h2>Totales</h2>
-    
-    <label for="total_pagar">Total a Pagar:</label>
-    <input type="text" id="valor" value="$250.00" readonly>
-    
-    <label for="terminos">Términos y Condiciones:</label><br>
-    <input type="checkbox" id="terminos" name="terminos" required>
-    <label for="terminos">Acepto los términos y condiciones</label><br><br>
-    
-      <input type="submit" value="Pagar" class="submit-btn">
-    </form>
+    <div class="content">
+      <h1>¡Gracias por tu pago!</h1>
+      <p>Estamos muy agradecidos por tu contribución. Nos encantaría seguir ayudándote en el futuro.</p>
+      <p>¡Gracias de nuevo!</p>
+    </div>
   </div>
 </body>
 </html>
-
-____________________________________________________________________________________________________________________________
-
-from flask import Flask, render_template, request
-import pyodbc
-
-app = Flask(__name__)
-
-# Establecer la conexión a la base de datos SQL Server
-conn = pyodbc.connect(
-    'DRIVER={SQL Server};'
-    'SERVER=tu_servidor;'
-    'DATABASE=nombre_de_tu_base_de_datos;'
-    'UID=tu_usuario;'
-    'PWD=tu_contraseña;'
-)
-
-@app.route('/')
-def index():
-    return render_template('formulario.html')
-
-@app.route('/procesar_factura', methods=['POST'])
-def procesar_factura():
-    nombre = request.form['nombre']
-    metodo_pago = request.form['metodo_pago']
-    numT = request.form['numT']
-    total_pagar = request.form['total_pagar']
-
-    try:
-        cursor = conn.cursor()
-        # Insertar datos en la tabla Facturacion
-        sql = "INSERT INTO Facturacion (usuario_id, total_amount, descripcion, tarjeta) VALUES (?, ?, ?, ?)"
-        cursor.execute(sql, (1, total_pagar, 'Pago de suscripción', numT))  # Cambia '1' por el ID real del usuario
-        conn.commit()
-        return "Datos insertados correctamente"
-    except Exception as e:
-        return f"Error: {str(e)}"
-
-if __name__ == '__main__':
-    app.run(debug=True)
