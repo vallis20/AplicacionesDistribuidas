@@ -118,3 +118,14 @@
   </div>
 </body>
 </html>
+
+
+CREATE TABLE Facturacion (
+    factura_id INT IDENTITY(1,1) PRIMARY KEY,
+    usuario_id INT, -- Assuming a foreign key to the customer table
+    fecha_factura DATETIME DEFAULT CURRENT_TIMESTAMP,
+    total_amount DECIMAL(10, 2),
+    descripcion VARCHAR(255),
+	tarjeta VARCHAR(20),
+	FOREIGN KEY (usuario_id) REFERENCES Usuarios(usr_id)
+);
