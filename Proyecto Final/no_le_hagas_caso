@@ -1,74 +1,69 @@
+import os
 import asyncio
 import websockets
-import http.server
-import socketserver
-import os
-from websockets.exceptions import ConnectionClosedOK
+from flask import Flask, jsonify, redirect, render_template, request
 from connectionbd import BaseDatos
-from informes import generate_general_report, generate_billing_report
-from http.client import HTTPConnection
-import signal
+from flask_cors import CORS
+#from informes import generate_general_report, generate_billing_report
 
-class HTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory="./")
+app = Flask(__name__)
+CORS(app)
 
-async def websocket_handler(websocket, path):
-    print(f"Nueva conexión establecida con {path}")
-    async for message in websocket:
-        print(message)
-        if message == 'subir_archivo':
-            # ... (código existente para subir archivo)
-        elif message == 'descargar_archivo':
-            # ... (código existente para descargar archivo)
-        elif message == 'generar_reporte_general':
-            # ... (código existente para generar reporte general)
-        elif message == 'generar_reporte_facturacion':
-            # ... (código existente para generar reporte de facturación)
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/menu')
+def menu():
+    return render_template('menu.html')
+
+@app.route('/admin')  
+def admin():
+    return render_template('admin.html')  
+
+@app.route('/reportes')  
+def reportes():
+    return render_template('reportes.html')  
+
+@app.route('/facturacion')  
+def facturacion():
+    return render_template('factura.html')  
+
+@app.route('/ticket')  
+def ticket():
+    return render_template('ticket.html')  
+
+@app.route('/procesar_factura', methods=['POST'])
+def procesar_factura():
+    try:
+        # Obtiene el número de tarjeta desde la solicitud JSON
+        numero_tarjeta = request.json.get('numeroTarjeta')
+
+        # Realiza el procesamiento necesario con el número de tarjeta
+        bd = BaseDatos()  # Instanciamos la clase BaseDatos
+        bd.connect()  # Conexión a la base de datos
+
+        columnas = ['usuario_id', 'total_amount', 'descripcion', 'tarjeta']
+        valores = ('1', '250.00', 'pago', numero_tarjeta)  # Los valores a insertar en las columnas correspondientes
+        bd.insert('Facturacion', columnas, valores)
+
+
+        return jsonify({"mensaje": "Factura procesada correctamente"})
+    except Exception as e:
+        print("Error al procesar la factura:", str(e))
+        return jsonify({"error": f"Error al procesar la factura: {str(e)}"}), 500
+
+@app.route('/catalogo')
+def catalogo():
+    return render_template('catalogo.html')  
+
 
 async def main():
-    # Iniciar múltiples instancias de tu servidor en diferentes puertos
-    ports = [5555, 5556, 5557]
-    servers = []
-    for port in ports:
-        server = websockets.serve(websocket_handler, "localhost", port)
-        servers.append(server)
-
-    # Iniciar el servidor HTTP
-    http_server = socketserver.TCPServer(('localhost', 8080), HTTPRequestHandler)
-    http_server_thread = asyncio.get_event_loop().run_in_executor(None, http_server.serve_forever)
-
-    print("Balanceador de carga activo. Esperando conexiones...")
-
-    terminate = False
-
-    def signal_handler(sig, frame):
-        nonlocal terminate
-        print('Terminando el balanceador de carga...')
-        terminate = True
-
-    signal.signal(signal.SIGINT, signal_handler)  # Manejar la señal de interrupción (Ctrl+C)
-
-    # Balanceo de carga simple redirigiendo solicitudes a diferentes instancias
-    while not terminate:
-        for port in ports:
-            try:
-                conn = HTTPConnection(f"localhost:{port}")
-                conn.request("GET", "/")
-                response = conn.getresponse()
-                if response.status == 200:
-                    # Redirigir el tráfico a la primera instancia disponible
-                    ws_url = f"ws://localhost:{port}/"
-                    await websockets.connect(ws_url)
-                    print(f"Tráfico redirigido a la instancia en el puerto {port}")
-                    break
-            except ConnectionRefusedError:
-                pass
 
     await asyncio.gather(
-        *servers,
-        http_server_thread,
+        app.run(port=5000, debug=True)
     )
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    print("Servidor esperando conexiones...")
+    app.run(debug=True)
