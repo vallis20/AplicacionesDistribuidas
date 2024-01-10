@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ticket de Compra</title>
+  <style>
+    /* Estilos para el ticket */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    .ticket {
+      width: 50%;
+      margin: 0 auto;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    p {
+      color: #555;
+    }
+
+    .details {
+      margin-top: 20px;
+    }
+
+    .details p {
+      margin-bottom: 10px;
+    }
+
+    .back-to-menu {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .back-to-menu a {
+      text-decoration: none;
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: #fff;
+      border-radius: 4px;
+    }
+
+    .back-to-menu a:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="ticket">
+    <h1>Ticket de Compra</h1>
+    <p>¡Gracias por tu compra! Hemos recibido tu pago correctamente.</p>
+    <div class="details">
+      <p>Fecha y Hora de Compra: <span id="fechaHora"></span></p>
+      <p>Monto: $200.00</p>
+      <!-- Puedes agregar más detalles del ticket aquí, como productos, etc. -->
+    </div>
+
+    <!-- Enlace para regresar al menú -->
+    <div class="back-to-menu">
+      <a href="/menu">Regresar al Menú</a>
+    </div>
+  </div>
+
+  <script>
+    // Obtener la fecha y hora actual
+    var fechaHoraActual = new Date();
+    var formatoFechaHora = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
+
+    // Actualizar el contenido del elemento con id "fechaHora"
+    document.getElementById('fechaHora').textContent = fechaHoraActual.toLocaleDateString('es-ES', formatoFechaHora);
+  </script>
+</body>
+</html>

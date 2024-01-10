@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pago de Suscripcion</title>
+  <style>
+    /* Reset de estilos básicos */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Estilos para el cuerpo y el contenedor principal */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Estilos para títulos */
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    h2 {
+      margin-top: 20px;
+      color: #555;
+    }
+
+    /* Estilos para etiquetas y campos de entrada */
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #666;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="tel"],
+    input[type="email"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    input[type="submit"] {
+      padding: 10px 20px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    /* Otros estilos */
+    textarea {
+      resize: vertical;
+      height: 100px;
+    }
+
+    .submit-btn {
+      width: auto;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<script>
+  function pagar() {
+    // Obtiene el número de tarjeta
+    var numeroTarjeta = document.getElementById('numeroTarjeta').value;
+
+    // Realiza una solicitud POST a la ruta '/procesar_factura' en Flask
+    fetch('/procesar_factura', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ numeroTarjeta: numeroTarjeta }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Manejar la respuesta si es necesario
+      console.log("Respuesta del servidor:", data);
+      // Redirige a la página de ticket después de procesar la factura
+      window.location.href = "/ticket";
+    })
+    .catch(error => {
+      console.error('Error al procesar la factura:', error);
+    });
+  }
+</script>
+
+<body>
+  <div class="container">
+    <h1>Factura</h1>
+    <form action="/procesar_factura" method="post">
+      <!-- ... (los campos del formulario) ... -->
+      <h2>Datos del Cliente</h2>
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre"><br><br>
+      
+      <label for="metodo_pago">Método de Pago:</label>
+      <select id="metodo_pago" name="metodo_pago">
+        <option value="tarjeta">Tarjeta</option>
+      </select><br><br>
+      <label for="numT">Número de Tarjeta:</label>
+      <input type="text" id="numeroTarjeta" name="numT"><br><br>
+      
+      <h2>Pago de Suscripción </h2>
+      <label for="precio_unitario">Precio Mensual:</label>
+      <input type="text" id="valor" value="$250.00" readonly>
+      
+      <h2>Totales</h2>
+      
+      <label for="total_pagar">Total a Pagar:</label>
+      <input type="text" id="valor" value="$250.00" readonly>
+      
+      <label for="terminos">Términos y Condiciones:</label><br>
+      <input type="checkbox" id="terminos" name="terminos" required>
+      <label for="terminos">Acepto los términos y condiciones</label><br><br>
+      
+      <input type="button" value="Pagar" class="submit-btn" onclick="pagar()">
+    </form>
+  </div>
+</body>
+</html>

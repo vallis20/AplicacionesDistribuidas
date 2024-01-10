@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  flask:
+    build:
+      context: ./servidor_flask
+    ports:
+      - "5000:5000"
+    depends_on:
+      - websockets
+
+  websockets:
+    build:
+      context: ./servidor_websockets
+    ports:
+      - "5555:5555"

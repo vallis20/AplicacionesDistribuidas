@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto final</title>
+</head>
+
+<style>
+  body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-image: url('%PUBLIC_URL%/fondo2.avif'); /* Reemplaza 'ruta_de_la_imagen.jpg' con la ruta de tu imagen */
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: rgb(255, 255, 255); /* Cambiar el color del texto para que sea legible en el fondo */
+  }
+
+  h1 {
+      color: rgb(255, 255, 255);
+      border-bottom: 1px solid rgb(255, 255, 255);
+      padding-bottom: 5px;
+      margin-bottom: 10px;
+  }
+
+  button, a {
+      display: ruby-base;
+      margin-bottom: 10px;
+      padding: 8px 15px;
+      text-decoration: none;
+      color: #fff;
+      background-color: #4e4c57;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+  }
+
+  button:hover, a:hover {
+      background-color: #17939c;
+  }
+</style>
+
+<body>
+    <h1><center>Bienvenido</center></h1>
+    <h3><center>Para usar nuestro servicio necesitas iniciar sesión</center></h3>
+    <center><a href="{{ url_for('menu') }}" id="">Menu</a></center>
+    <p></p>
+    <center><a href="{{ url_for('admin') }}" id="">Administrador</a></center>
+
+    <div id="root"></div>
+    <div id="conexion"></div>
+
+  <script type="text/babel">
+      // Código de React aquí
+      const { useAuth0 } = require('@auth0/auth0-react');
+      // No es necesario importar useAuth0 aquí, a menos que lo necesites más adelante
+
+      // Renderizar el componente LoginButton en el contenedor 'root'
+      ReactDOM.render(<LoginButton />, document.getElementById('root'));
+      ReactDOM.render(<Conexion/>, document.getElementById('conexion'));
+  </script>
+</body>
+</html>
